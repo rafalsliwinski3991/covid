@@ -1,0 +1,23 @@
+version: '3'
+
+services:
+  mongo:
+    image: mongo:latest
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: rootpassword
+    ports:
+      - 27017:27017
+    volumes:
+      - mongodb_data:/data/db
+  backend:
+    build: ./backend/Dockerfile
+    links:
+      - mongo
+    ports:
+      - "8888:8888"
+    command: --db_host=mongo
+
+
+volumes:
+  mongodb_data:
