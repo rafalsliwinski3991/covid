@@ -1,0 +1,1 @@
+/usr/local/bin/postgres "-c" "max_wal_size=5120"

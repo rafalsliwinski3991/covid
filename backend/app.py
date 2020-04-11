@@ -1,10 +1,19 @@
 import tornado.ioloop
 import tornado.web
+from tornado.httpclient import AsyncHTTPClient
 
 
 class MainHandler(tornado.web.RequestHandler):
-    def get(self):
-        self.write("Hello, world")
+    async def get(self):
+        http_client = AsyncHTTPClient(
+            headers={
+               'x-rapidapi-host': "covid-19-data.p.rapidapi.com",
+                'x-rapidapi-key': "0cb1642762msh7fb4595b29245afp167c30jsn02e2a9801d0c"
+            }
+        )
+        response = await http_client.fetch('https://covid-19-data.p.rapidapi.com/totals')
+        print('response')
+        self.write(response)
 
 
 def make_app():

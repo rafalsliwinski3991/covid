@@ -1,23 +1,35 @@
 version: '3'
 
 services:
-  mongo:
-    image: mongo:latest
+  redis:
+    image: redis
+    ports:
+      - "6379:6379"
+  postgres:
+    user: root
+    image: 'postgres:10-alpine'
     environment:
-      MONGO_INITDB_ROOT_USERNAME: root
-      MONGO_INITDB_ROOT_PASSWORD: rootpassword
-    ports:
-      - 27017:27017
+      POSTGRES_PASSWORD: postgres
+    command: postgres -c max_wal_size=5120
     volumes:
-      - mongodb_data:/data/db
-  backend:
-    build: ./backend/Dockerfile
-    links:
-      - mongo
+      - './volumes/postgres:/var/lib/postgresql/data'
     ports:
-      - "8888:8888"
-    command: --db_host=mongo
+      - '9000:5432'
+  backend:
+    build:
+      context: ./
+      dockerfile: ./backend/Dockerfile
+    command: python manage.py runserver 0.0.0.0:8000
+    ports:
+      - '8000:8000'
+    volumes:
+      - './backend/app:/src/app'
+      - './backend/files:/srv/files'
+      - './volumes/media/backend:/srv/media'
+    depends_on:
+      - postgres
+      - redis
 
 
 volumes:
-  mongodb_data:
+  postgres:
