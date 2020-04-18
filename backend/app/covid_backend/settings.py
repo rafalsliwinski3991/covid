@@ -25,12 +25,14 @@ SECRET_KEY = 'ig*^==_q=%_oj@q4!2=+=48ilp-goowo_f43=8(yyg5$km9$c8'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['0.0.0.0', '127.0.0.1']
 
 
 # Application definition
 
 INSTALLED_APPS = [
+    'channels',
+    'chat',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -67,7 +69,7 @@ TEMPLATES = [
     },
 ]
 
-WSGI_APPLICATION = 'covid_backend.wsgi.application'
+# WSGI_APPLICATION = 'covid_backend.wsgi.application'
 
 
 # Database
@@ -118,3 +120,16 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/3.0/howto/static-files/
 
 STATIC_URL = '/static/'
+
+# CHANNELS
+ASGI_APPLICATION = 'covid_backend.routing.application'
+
+print('SETTINGS')
+CHANNEL_LAYERS = {
+    "default": {
+        "BACKEND": "channels_redis.core.RedisChannelLayer",
+        "CONFIG": {
+            "hosts": [("redis", 6379)],
+        },
+    },
+}
