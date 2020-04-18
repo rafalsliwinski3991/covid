@@ -1,7 +1,7 @@
 *.log
 *.pot
 *.pyc
-__pycache__/
+backend/app/covid_backend/__pycache__
 local.py
 db.sqlite3
 volumes
